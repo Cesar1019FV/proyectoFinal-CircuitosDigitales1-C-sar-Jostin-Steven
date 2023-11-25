@@ -1,14 +1,10 @@
-module Module_2(Input_1_Module2,Input_2_Module2,Z);
+module celda_tipica(
+    input x, y, A, B, f_in,
+    output f_mid, g_mid
+);
 
-input A,B,C,clk.rst;
-
-output Z;
-
-
-//Implementing the functionality of module2
-
-assign Z = ((~(Input_1_Module2 | Input_2_Module2)) & (Input_1_Module2 & Input_2_Module2));
-
-
+assign f_mid = ((x)|((~x & y) & A));
+    
+assign g_mid = (y|(~x & f_in));
 
 endmodule

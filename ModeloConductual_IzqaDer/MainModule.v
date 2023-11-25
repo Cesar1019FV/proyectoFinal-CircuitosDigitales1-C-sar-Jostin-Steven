@@ -1,23 +1,36 @@
-module Main_Module(A,B,C,D,rst,clk,Z);
+module system (
+    input A, B,
+    input x, y,
+    output f
+);
 
-input A,B,C,D,clk.rst;
+//conexiones generadas para el cableado de cada celda
+wire f_in;
+wire f_mid;
+wire g_mid;
 
-output Z;
+//instanciacion de la celda inicial
+celda_inicial C0 (
+    .A(A), 
+    .B(B),
+    .f_in(f_in)
+);
 
-//module instantuation of module 1
-wire Output_1_Module1, Output_2_Module1;
-Module1 Module1(.A(A),
-                .B(B),
-                .C(C),
-                .D(D),
-                .Output_1_Module1(),
-                .Output_2_Module1());
-end
+//instanciacion de la celda tipica
+celda_tipica C1(
+    .x(x),
+    .y(y),
+    .A(A), 
+    .B(B),
+    .f_in(f_in),
+    .f_mid(f_mid),
+    .g_mid(g_mid)
+);
 
-//module instantuation of module 2
-Module_2 Module_2(.Input_1_Module2(Output_1_Module1),
-                .Input_2_Module2(Output_2_Module1),
-                .Z(Z));
-end 
+//instanciacion de la celda final
+celda_final C2(
+    .g_mid(g_mid),
+    .f(f)
+);
 
 endmodule
