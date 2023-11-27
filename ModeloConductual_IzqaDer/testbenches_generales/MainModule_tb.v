@@ -18,8 +18,8 @@ module MainModule_tb();
     $dumpvars(1, MainModule_tb);
     
     //definir los vectores necesitados
-    miVectorA = 3'b111;
-    miVectorB = 3'b101;
+    miVectorA = 3'b011;
+    miVectorB = 3'b001;
 
     // bucle para comparar los bits de los vectores
     //integer n;

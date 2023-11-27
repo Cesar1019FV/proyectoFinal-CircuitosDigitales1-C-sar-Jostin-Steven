@@ -1,21 +1,33 @@
 // module_3_tb.v
 `timescale 1 ns/10 ps // time-unit = 1 ns, precision = 10 ps
 module celda_final_tb();
-  reg g_mid;
+  reg f_mid;
   wire f;
- // duration for each bit = 20 * timescale = 20 * 1 ns = 20ns
- localparam period = 20;
- celda_final UUT (.g_mid(g_mid), .f(f));
 
- initial // initial block executes only once
- begin
- $dumpfile ("module_3_tb.vcd");
- $dumpvars(1, celda_final_tb);
+  // duration for each bit = 20 * timescale = 20 * 1 ns = 20ns
+  localparam period = 20;
+  celda_final UUT (
+    .f_mid(f_mid),
+    .f(f)
+  );
 
-// values for a and b
-g_mid = 1;
-#period; // wait for period
-g_mid = 0;
-#period; // wait for period
- end
+  initial begin
+    $dumpfile ("module_3_tb.vcd");
+    $dumpvars(1, celda_final_tb);
+
+    // values for f_mid
+    f_mid = 1'b0;
+    #period;
+
+    f_mid = 1'b1;
+    #period;
+
+    f_mid = 1'b0;
+    #period;
+
+    f_mid = 1'b1;
+    #period;
+
+    $finish; // Termina la simulación después de completar las pruebas
+  end
 endmodule
