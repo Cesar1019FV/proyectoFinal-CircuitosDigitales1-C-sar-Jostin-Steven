@@ -5,7 +5,8 @@ module CableadoBit_tb();
     reg [N-1:0] miVectorA;
     reg [N-1:0] miVectorB;
 
-    // Se añade la variable P en la instancia del módulo CableadoBit
+    integer seed; // Variable de semilla para los números aleatorios
+
     localparam period = 20;
     CableadoBit uut (
         .Z_out(Z_out),
@@ -14,37 +15,32 @@ module CableadoBit_tb();
         .P(P)
     );
 
-    integer n;
-    initial // initial block executes only once
-    begin
+    integer i;
+
+    initial begin
         $dumpfile("prueba4_tb.vcd");
         $dumpvars(1, CableadoBit_tb);
         
-        // Definir los vectores necesitados
-        miVectorA = 16'b1101101010111111;
-        miVectorB = 16'b110110101011010;      
+        for (i = 0; i < 10; i = i + 1) begin
+            $display("Prueba %0d", i);
+            
+            seed = $random; // Inicializar la semilla
 
-        // Bucle para comparar los bits de los vectores
-        for (n = N-1 ; n >= 0; n = n - 1) begin
-            // Compara los términos correspondientes de los vectores
-            if (miVectorA[n] == miVectorB[n]) begin
-                $display("Por el momento las dos palabras son iguales");
-                P = 0;
-                #period;
-            end else if (miVectorA[n] > miVectorB[n]) begin
-                $display("La palabra A es mayor a la palabra B");
+            miVectorA = $random(seed) % (1 << N); // Generar número aleatorio entre 0 y (2^N - 1)
+            miVectorB = $random(seed) % (1 << N); // Generar número aleatorio entre 0 y (2^N - 1)
+
+            $display("miVectorA = %b, miVectorB = %b", miVectorA, miVectorB);
+
+            if (miVectorA > miVectorB)
                 P = 1;
-                #period;
-                $stop;
-            end else begin
-                $display("La palabra B es mayor a la palabra A");
+            else
                 P = 0;
-                #period;
-                $stop;
-            end
 
-            $display("Para n = %0d, P = %0d, Z_out = %0d", n, P, Z_out);
             #period;
+
+            $display("P = %0d, Z_out = %0d", P, Z_out);
         end
+
+        $finish; // Finalizar la simulación
     end
 endmodule
